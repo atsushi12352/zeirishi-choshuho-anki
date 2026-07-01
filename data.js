@@ -1,0 +1,68 @@
+// 国税徴収法 理論項目マスタデータ
+const THEMES = [
+  { id: 1, name: "国税と他の債権との調整" },
+  { id: 2, name: "第二次納税義務" },
+  { id: 3, name: "滞納処分" },
+  { id: 4, name: "換価・配当" },
+  { id: 5, name: "徴収緩和制度" },
+  { id: 6, name: "保全処分・国税の担保" },
+  { id: 7, name: "その他" },
+];
+
+const ITEMS = [
+  { id: "1-1", themeId: 1, title: "国税の一般的優先の原則" },
+  { id: "1-2", themeId: 1, title: "国税及び地方税の調整" },
+  { id: "1-3", themeId: 1, title: "留置権の優先" },
+  { id: "1-4", themeId: 1, title: "不動産保存の先取特権等の優先" },
+  { id: "1-5", themeId: 1, title: "法定納期限等以前にある不動産賃貸の先取特権等の優先" },
+  { id: "1-6", themeId: 1, title: "質権又は抵当権の優先" },
+  { id: "1-7", themeId: 1, title: "担保権付財産が譲渡された場合の国税の徴収" },
+  { id: "1-8", themeId: 1, title: "担保仮登記の優先とその滞納処分との関係" },
+  { id: "1-9", themeId: 1, title: "譲渡担保権者の物的納税責任" },
+  { id: "1-10", themeId: 1, title: "国税及び地方税等と私債権との競合の調整" },
+
+  { id: "2-1", themeId: 2, title: "第二次納税義務の通則的な徴収手続" },
+  { id: "2-2", themeId: 2, title: "各種第二次納税義務の態様" },
+
+  { id: "3-1", themeId: 3, title: "滞納処分による差押えの要件" },
+  { id: "3-2", themeId: 3, title: "第三者の権利の目的となっている財産の差押換" },
+  { id: "3-3", themeId: 3, title: "相続があった場合の財産の差押換" },
+  { id: "3-4", themeId: 3, title: "差押えにおける留意規定" },
+  { id: "3-5", themeId: 3, title: "各種財産の共通的な差押手続" },
+  { id: "3-6", themeId: 3, title: "動産又は有価証券の差押え" },
+  { id: "3-7", themeId: 3, title: "第三者が占有する動産等の差押えに当たっての第三者の権利の保護" },
+  { id: "3-8", themeId: 3, title: "債権の差押え" },
+  { id: "3-9", themeId: 3, title: "不動産の差押え" },
+  { id: "3-10", themeId: 3, title: "船舶又は航空機の差押え" },
+  { id: "3-11", themeId: 3, title: "自動車、建設機械又は小型船舶の差押え" },
+  { id: "3-12", themeId: 3, title: "第三債務者等がない無体財産権等の差押え" },
+  { id: "3-13", themeId: 3, title: "第三債務者等がある無体財産権等の差押え" },
+  { id: "3-14", themeId: 3, title: "差押えの一般的効力" },
+  { id: "3-15", themeId: 3, title: "差押えの解除" },
+  { id: "3-16", themeId: 3, title: "交付要求" },
+  { id: "3-17", themeId: 3, title: "参加差押" },
+  { id: "3-18", themeId: 3, title: "財産の調査" },
+
+  { id: "4-1", themeId: 4, title: "換価" },
+  { id: "4-2", themeId: 4, title: "換価の効果" },
+  { id: "4-3", themeId: 4, title: "配当" },
+
+  { id: "5-1", themeId: 5, title: "災害等による納税の猶予" },
+  { id: "5-2", themeId: 5, title: "通常の納税の猶予" },
+  { id: "5-3", themeId: 5, title: "課税遅延に基づく納税の猶予" },
+  { id: "5-4", themeId: 5, title: "換価の猶予" },
+  { id: "5-5", themeId: 5, title: "滞納処分の停止" },
+
+  { id: "6-1", themeId: 6, title: "繰上請求" },
+  { id: "6-2", themeId: 6, title: "保全差押" },
+  { id: "6-3", themeId: 6, title: "繰上保全差押" },
+  { id: "6-4", themeId: 6, title: "保全担保" },
+  { id: "6-5", themeId: 6, title: "国税の担保" },
+  { id: "6-6", themeId: 6, title: "納付委託" },
+  { id: "6-7", themeId: 6, title: "納付義務の承継" },
+  { id: "6-8", themeId: 6, title: "連帯納付義務" },
+
+  { id: "7-1", themeId: 7, title: "国税の処分に対する不服申立てと国税の徴収との関係" },
+  { id: "7-2", themeId: 7, title: "罰則" },
+  { id: "7-3", themeId: 7, title: "国税通則法及び国税徴収法の目的" },
+];

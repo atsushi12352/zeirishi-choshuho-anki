@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="徴収法暗記" />
+<title>徴収法 暗記トレーナー</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+  <header id="app-header">
+    <h1>徴収法 暗記トレーナー</h1>
+    <div id="exam-countdown"></div>
+  </header>
+
+  <main id="view-today" class="view">
+    <div id="today-summary"></div>
+    <div id="card-area"></div>
+    <div id="grade-buttons"></div>
+    <div id="today-done" class="hidden"></div>
+  </main>
+
+  <main id="view-themes" class="view hidden">
+    <div id="themes-list"></div>
+  </main>
+
+  <main id="view-settings" class="view hidden">
+    <section class="settings-section">
+      <label for="exam-date-input">試験日</label>
+      <input type="date" id="exam-date-input" />
+    </section>
+    <section class="settings-section">
+      <button id="export-btn" class="secondary-btn">データをバックアップ（書き出し）</button>
+      <label class="file-label">
+        データを読み込み（復元）
+        <input type="file" id="import-input" accept="application/json" />
+      </label>
+    </section>
+    <section class="settings-section">
+      <button id="reset-btn" class="danger-btn">全データを初期化</button>
+    </section>
+  </main>
+
+  <nav id="tabbar">
+    <button data-view="today" class="active">今日</button>
+    <button data-view="themes">テーマ</button>
+    <button data-view="settings">設定</button>
+  </nav>
+</div>
+
+<script src="data.js"></script>
+<script src="srs.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
