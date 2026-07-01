@@ -209,17 +209,20 @@ html, body {
   flex-direction: column;
 }
 
+.item-block {
+  border-bottom: 1px solid var(--border);
+}
+
+.item-block:last-child {
+  border-bottom: none;
+}
+
 .item-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid var(--border);
   gap: 10px;
-}
-
-.item-row:last-child {
-  border-bottom: none;
 }
 
 .item-title {
@@ -230,6 +233,13 @@ html, body {
   font-size: 11px;
   color: var(--text-muted);
   margin-top: 2px;
+}
+
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .rank-select {
@@ -252,19 +262,31 @@ html, body {
 .rank-opt.active.rank-B { background: var(--rank-b); color: #fff; border-color: var(--rank-b); }
 .rank-opt.active.rank-C { background: var(--rank-c); color: #fff; border-color: var(--rank-c); }
 
-.memo-label {
-  font-size: 12px;
+.note-toggle-btn {
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
   color: var(--text-muted);
-  margin: 12px 0 6px;
 }
 
-.theme-memo {
+.note-toggle-btn.has-note {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.item-note-area {
+  padding: 0 0 10px;
+}
+
+.item-memo {
   width: 100%;
-  min-height: 70px;
+  min-height: 56px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 10px;
-  font-size: 13px;
+  padding: 8px 10px;
+  font-size: 12px;
   font-family: inherit;
   resize: vertical;
   background: var(--bg);

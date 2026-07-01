@@ -11,6 +11,8 @@ let state = loadState();
 let todayQueue = [];
 let currentCard = null;
 let extraMode = false;
+let expandedThemes = new Set();
+let expandedNotes = new Set();
 
 function loadState() {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -31,7 +33,7 @@ function createFreshState() {
   });
   return {
     items,
-    themeNotes: {},
+    itemNotes: {},
     examDate: null,
     today: { date: todayStr(), doneIds: [] },
   };
@@ -43,7 +45,7 @@ function migrateState(loaded) {
   ITEMS.forEach((i) => {
     if (!loaded.items[i.id]) loaded.items[i.id] = fresh.items[i.id];
   });
-  loaded.themeNotes = loaded.themeNotes || {};
+  loaded.itemNotes = loaded.itemNotes || {};
   if (loaded.examDate === undefined) loaded.examDate = null;
   if (!loaded.today || loaded.today.date !== todayStr()) {
     loaded.today = { date: todayStr(), doneIds: [] };
@@ -218,11 +220,14 @@ function renderThemes() {
       </div>
     `;
     header.addEventListener("click", () => {
-      body.classList.toggle("hidden");
+      if (expandedThemes.has(theme.id)) expandedThemes.delete(theme.id);
+      else expandedThemes.add(theme.id);
+      renderThemes();
     });
 
     const body = document.createElement("div");
-    body.className = "theme-body hidden";
+    body.className =
+      "theme-body" + (expandedThemes.has(theme.id) ? "" : " hidden");
 
     const itemList = document.createElement("div");
     itemList.className = "item-list";
@@ -230,6 +235,12 @@ function renderThemes() {
       const s = state.items[i.id];
       const dueLabel =
         s.due <= today ? "本日期限" : `次回 ${s.due}`;
+      const noteOpen = expandedNotes.has(i.id);
+      const hasNote = !!(state.itemNotes[i.id] && state.itemNotes[i.id].trim());
+
+      const block = document.createElement("div");
+      block.className = "item-block";
+
       const row = document.createElement("div");
       row.className = "item-row";
       row.innerHTML = `
@@ -237,11 +248,14 @@ function renderThemes() {
           <div class="item-title">${i.id} ${i.title}</div>
           <div class="item-due">${dueLabel}</div>
         </div>
-        <div class="rank-select" data-item="${i.id}">
-          ${RANKS.map(
-            (r) =>
-              `<button class="rank-opt ${r === s.rank ? "active" : ""} rank-${r}" data-rank="${r}">${r}</button>`
-          ).join("")}
+        <div class="item-controls">
+          <div class="rank-select" data-item="${i.id}">
+            ${RANKS.map(
+              (r) =>
+                `<button class="rank-opt ${r === s.rank ? "active" : ""} rank-${r}" data-rank="${r}">${r}</button>`
+            ).join("")}
+          </div>
+          <button type="button" class="note-toggle-btn ${hasNote ? "has-note" : ""}">メモ</button>
         </div>
       `;
       row
@@ -253,29 +267,34 @@ function renderThemes() {
             renderThemes();
           })
         );
-      itemList.appendChild(row);
-    });
+      row.querySelector(".note-toggle-btn").addEventListener("click", () => {
+        if (expandedNotes.has(i.id)) expandedNotes.delete(i.id);
+        else expandedNotes.add(i.id);
+        renderThemes();
+      });
 
-    const memoLabel = document.createElement("div");
-    memoLabel.className = "memo-label";
-    memoLabel.textContent = "テーマメモ";
+      const noteArea = document.createElement("div");
+      noteArea.className = "item-note-area" + (noteOpen ? "" : " hidden");
+      const noteTextarea = document.createElement("textarea");
+      noteTextarea.className = "item-memo";
+      noteTextarea.placeholder = "この論点についてのメモ";
+      noteTextarea.value = state.itemNotes[i.id] || "";
+      let noteTimer = null;
+      noteTextarea.addEventListener("input", () => {
+        clearTimeout(noteTimer);
+        noteTimer = setTimeout(() => {
+          state.itemNotes[i.id] = noteTextarea.value;
+          saveState();
+        }, 400);
+      });
+      noteArea.appendChild(noteTextarea);
 
-    const memo = document.createElement("textarea");
-    memo.className = "theme-memo";
-    memo.placeholder = "このテーマに関するメモを自由に書けます";
-    memo.value = state.themeNotes[theme.id] || "";
-    let memoTimer = null;
-    memo.addEventListener("input", () => {
-      clearTimeout(memoTimer);
-      memoTimer = setTimeout(() => {
-        state.themeNotes[theme.id] = memo.value;
-        saveState();
-      }, 400);
+      block.appendChild(row);
+      block.appendChild(noteArea);
+      itemList.appendChild(block);
     });
 
     body.appendChild(itemList);
-    body.appendChild(memoLabel);
-    body.appendChild(memo);
     card.appendChild(header);
     card.appendChild(body);
     container.appendChild(card);
