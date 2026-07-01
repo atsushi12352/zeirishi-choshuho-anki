@@ -29,11 +29,10 @@
 
   <main id="view-records" class="view hidden">
     <section class="settings-section">
-      <label for="extra-review-count">テーマ以外の復習を記録（本日分）</label>
-      <div class="extra-review-controls">
-        <input type="number" id="extra-review-count" min="1" value="1" />
-        <button id="extra-review-btn" class="secondary-btn">記録する</button>
-      </div>
+      <label for="record-item-select">論点を選んで学習を記録</label>
+      <select id="record-item-select"></select>
+      <div id="record-item-info" class="record-item-info"></div>
+      <div id="record-grade-buttons" class="grade-buttons-row"></div>
     </section>
     <section class="settings-section">
       <div id="review-history-summary"></div>

@@ -325,22 +325,28 @@ html, body {
   color: var(--text);
 }
 
-.extra-review-controls {
-  display: flex;
-  gap: 8px;
-}
-
-.extra-review-controls input[type="number"] {
-  width: 72px;
+#record-item-select {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid var(--border);
   font-size: 14px;
+  background: var(--surface);
+  color: var(--text);
 }
 
-.extra-review-controls .secondary-btn {
-  margin-top: 0;
-  flex: 1;
+.record-item-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  min-height: 20px;
+}
+
+.grade-buttons-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
 }
 
 #review-history-summary {

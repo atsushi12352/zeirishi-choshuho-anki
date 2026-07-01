@@ -315,7 +315,34 @@ function renderThemes() {
 
 const REVIEW_HISTORY_DAYS = 14;
 
+function renderRecordItemInfo() {
+  const select = document.getElementById("record-item-select");
+  const infoEl = document.getElementById("record-item-info");
+  const id = select.value;
+  if (!id) {
+    infoEl.textContent = "";
+    return;
+  }
+  const s = state.items[id];
+  const today = todayStr();
+  const dueLabel = s.due <= today ? "本日期限" : `次回 ${s.due}`;
+  infoEl.innerHTML = `<span class="card-rank rank-${s.rank}">${s.rank}ランク</span><span>${dueLabel}</span>`;
+}
+
+function handleRecordGrade(grade) {
+  const select = document.getElementById("record-item-select");
+  const id = select.value;
+  if (!id) return;
+  state.items[id] = reviewItem(state.items[id], grade);
+  if (!state.today.doneIds.includes(id)) state.today.doneIds.push(id);
+  logReview(todayStr(), 1);
+  saveState();
+  renderRecords();
+}
+
 function renderRecords() {
+  renderRecordItemInfo();
+
   const summaryEl = document.getElementById("review-history-summary");
   const listEl = document.getElementById("review-history-list");
   const today = todayStr();
@@ -345,13 +372,27 @@ function renderRecords() {
 }
 
 function setupRecordsHandlers() {
-  document.getElementById("extra-review-btn").addEventListener("click", () => {
-    const input = document.getElementById("extra-review-count");
-    const count = Math.max(1, parseInt(input.value, 10) || 1);
-    logReview(todayStr(), count);
-    saveState();
-    renderRecords();
-    input.value = "1";
+  const select = document.getElementById("record-item-select");
+  THEMES.forEach((theme) => {
+    const group = document.createElement("optgroup");
+    group.label = `テーマ${theme.id}　${theme.name}`;
+    ITEMS.filter((i) => i.themeId === theme.id).forEach((i) => {
+      const opt = document.createElement("option");
+      opt.value = i.id;
+      opt.textContent = `${i.id} ${i.title}`;
+      group.appendChild(opt);
+    });
+    select.appendChild(group);
+  });
+  select.addEventListener("change", renderRecordItemInfo);
+
+  const gradeArea = document.getElementById("record-grade-buttons");
+  GRADE_LABELS.forEach(({ grade, label }) => {
+    const btn = document.createElement("button");
+    btn.className = `grade-btn grade-${grade}`;
+    btn.textContent = label;
+    btn.addEventListener("click", () => handleRecordGrade(grade));
+    gradeArea.appendChild(btn);
   });
 }
 
