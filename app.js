@@ -237,6 +237,7 @@ function renderThemes() {
         s.due <= today ? "本日期限" : `次回 ${s.due}`;
       const noteOpen = expandedNotes.has(i.id);
       const hasNote = !!(state.itemNotes[i.id] && state.itemNotes[i.id].trim());
+      const itemRate = itemRetentionRate(s);
 
       const block = document.createElement("div");
       block.className = "item-block";
@@ -247,6 +248,10 @@ function renderThemes() {
         <div class="item-info">
           <div class="item-title">${i.id} ${i.title}</div>
           <div class="item-due">${dueLabel}</div>
+          <div class="item-rate">
+            <div class="item-rate-bar"><div class="item-rate-fill" style="width:${itemRate}%"></div></div>
+            <span>${itemRate}%</span>
+          </div>
         </div>
         <div class="item-controls">
           <div class="rank-select" data-item="${i.id}">
@@ -367,6 +372,11 @@ function setupTabs() {
     themes: document.getElementById("view-themes"),
     settings: document.getElementById("view-settings"),
   };
+  const renderers = {
+    today: renderToday,
+    themes: renderThemes,
+    settings: renderSettings,
+  };
   document.querySelectorAll("#tabbar button").forEach((btn) => {
     btn.addEventListener("click", () => {
       document
@@ -375,6 +385,7 @@ function setupTabs() {
       btn.classList.add("active");
       Object.values(views).forEach((v) => v.classList.add("hidden"));
       views[btn.dataset.view].classList.remove("hidden");
+      renderers[btn.dataset.view]();
     });
   });
 }

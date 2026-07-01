@@ -225,6 +225,11 @@ html, body {
   gap: 10px;
 }
 
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .item-title {
   font-size: 13px;
 }
@@ -233,6 +238,33 @@ html, body {
   font-size: 11px;
   color: var(--text-muted);
   margin-top: 2px;
+}
+
+.item-rate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.item-rate-bar {
+  flex: 1;
+  max-width: 120px;
+  height: 4px;
+  background: var(--accent-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.item-rate-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.item-rate span {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .item-controls {

@@ -2,6 +2,7 @@
 
 const RANK_MULTIPLIER = { A: 0.6, B: 1.0, C: 1.4 };
 const MASTERED_INTERVAL_DAYS = 14;
+const MASTERED_REPS_COUNT = 3;
 
 function toLocalDateStr(d) {
   const y = d.getFullYear();
@@ -69,9 +70,17 @@ function reviewItem(state, grade) {
 }
 
 function isMastered(state) {
-  return state.interval >= MASTERED_INTERVAL_DAYS && state.reps >= 3;
+  return state.interval >= MASTERED_INTERVAL_DAYS && state.reps >= MASTERED_REPS_COUNT;
 }
 
 function isDue(state, onDateStr) {
   return state.due <= onDateStr;
+}
+
+// 個別項目の定着率（0〜100）。間隔と反復回数がそれぞれ習熟基準に対してどこまで
+// 進んでいるかの積で表す。習熟済み（isMastered）になると100%になる。
+function itemRetentionRate(state) {
+  const intervalRatio = Math.min(1, state.interval / MASTERED_INTERVAL_DAYS);
+  const repsRatio = Math.min(1, state.reps / MASTERED_REPS_COUNT);
+  return Math.round(intervalRatio * repsRatio * 100);
 }
