@@ -36,6 +36,7 @@ function createFreshState() {
     itemNotes: {},
     examDate: null,
     today: { date: todayStr(), doneIds: [] },
+    reviewLog: {},
   };
 }
 
@@ -50,7 +51,12 @@ function migrateState(loaded) {
   if (!loaded.today || loaded.today.date !== todayStr()) {
     loaded.today = { date: todayStr(), doneIds: [] };
   }
+  loaded.reviewLog = loaded.reviewLog || {};
   return loaded;
+}
+
+function logReview(dateStr, count) {
+  state.reviewLog[dateStr] = (state.reviewLog[dateStr] || 0) + count;
 }
 
 function saveState() {
@@ -191,6 +197,7 @@ function handleGrade(grade) {
   const id = currentCard.id;
   state.items[id] = reviewItem(state.items[id], grade);
   state.today.doneIds.push(id);
+  logReview(todayStr(), 1);
   saveState();
   renderToday();
 }
@@ -306,6 +313,48 @@ function renderThemes() {
   });
 }
 
+const REVIEW_HISTORY_DAYS = 14;
+
+function renderRecords() {
+  const summaryEl = document.getElementById("review-history-summary");
+  const listEl = document.getElementById("review-history-list");
+  const today = todayStr();
+  const dates = [];
+  for (let i = 0; i < REVIEW_HISTORY_DAYS; i++) {
+    dates.push(addDays(today, -i));
+  }
+  const counts = dates.map((d) => state.reviewLog[d] || 0);
+  const total = counts.reduce((sum, c) => sum + c, 0);
+  const max = Math.max(1, ...counts);
+
+  summaryEl.textContent = `過去${REVIEW_HISTORY_DAYS}日間の合計 ${total} 問`;
+
+  listEl.innerHTML = "";
+  dates.forEach((d, idx) => {
+    const count = counts[idx];
+    const pct = Math.round((count / max) * 100);
+    const row = document.createElement("div");
+    row.className = "history-row";
+    row.innerHTML = `
+      <div class="history-date">${d}${d === today ? "（本日）" : ""}</div>
+      <div class="history-bar-wrap"><div class="history-bar" style="width:${pct}%"></div></div>
+      <div class="history-count">${count}問</div>
+    `;
+    listEl.appendChild(row);
+  });
+}
+
+function setupRecordsHandlers() {
+  document.getElementById("extra-review-btn").addEventListener("click", () => {
+    const input = document.getElementById("extra-review-count");
+    const count = Math.max(1, parseInt(input.value, 10) || 1);
+    logReview(todayStr(), count);
+    saveState();
+    renderRecords();
+    input.value = "1";
+  });
+}
+
 function renderSettings() {
   const dateInput = document.getElementById("exam-date-input");
   dateInput.value = state.examDate || "";
@@ -363,6 +412,7 @@ function renderAll() {
   extraMode = false;
   renderToday();
   renderThemes();
+  renderRecords();
   renderSettings();
 }
 
@@ -370,11 +420,13 @@ function setupTabs() {
   const views = {
     today: document.getElementById("view-today"),
     themes: document.getElementById("view-themes"),
+    records: document.getElementById("view-records"),
     settings: document.getElementById("view-settings"),
   };
   const renderers = {
     today: renderToday,
     themes: renderThemes,
+    records: renderRecords,
     settings: renderSettings,
   };
   document.querySelectorAll("#tabbar button").forEach((btn) => {
@@ -392,6 +444,7 @@ function setupTabs() {
 
 document.addEventListener("DOMContentLoaded", () => {
   setupTabs();
+  setupRecordsHandlers();
   setupSettingsHandlers();
   renderAll();
 });

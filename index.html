@@ -27,6 +27,20 @@
     <div id="themes-list"></div>
   </main>
 
+  <main id="view-records" class="view hidden">
+    <section class="settings-section">
+      <label for="extra-review-count">テーマ以外の復習を記録（本日分）</label>
+      <div class="extra-review-controls">
+        <input type="number" id="extra-review-count" min="1" value="1" />
+        <button id="extra-review-btn" class="secondary-btn">記録する</button>
+      </div>
+    </section>
+    <section class="settings-section">
+      <div id="review-history-summary"></div>
+      <div id="review-history-list"></div>
+    </section>
+  </main>
+
   <main id="view-settings" class="view hidden">
     <section class="settings-section">
       <label for="exam-date-input">試験日</label>
@@ -47,6 +61,7 @@
   <nav id="tabbar">
     <button data-view="today" class="active">今日</button>
     <button data-view="themes">テーマ</button>
+    <button data-view="records">記録</button>
     <button data-view="settings">設定</button>
   </nav>
 </div>

@@ -325,6 +325,65 @@ html, body {
   color: var(--text);
 }
 
+.extra-review-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.extra-review-controls input[type="number"] {
+  width: 72px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.extra-review-controls .secondary-btn {
+  margin-top: 0;
+  flex: 1;
+}
+
+#review-history-summary {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.history-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 92px;
+  flex-shrink: 0;
+}
+
+.history-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: var(--accent-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.history-bar {
+  height: 100%;
+  background: var(--accent);
+}
+
+.history-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
 .settings-section {
   background: var(--surface);
   border: 1px solid var(--border);
