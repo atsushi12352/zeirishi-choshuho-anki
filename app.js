@@ -209,10 +209,11 @@ function renderThemes() {
 
   THEMES.forEach((theme) => {
     const items = ITEMS.filter((i) => i.themeId === theme.id);
-    const masteredCount = items.filter((i) =>
-      isMastered(state.items[i.id])
-    ).length;
-    const rate = Math.round((masteredCount / items.length) * 100);
+    const rateSum = items.reduce(
+      (sum, i) => sum + itemRetentionRate(state.items[i.id]),
+      0
+    );
+    const rate = Math.round(rateSum / items.length);
 
     const card = document.createElement("div");
     card.className = "theme-card";
